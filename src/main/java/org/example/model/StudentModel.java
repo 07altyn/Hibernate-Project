@@ -7,69 +7,52 @@ import jakarta.persistence.*;
 public class StudentModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer studentId;
 
-    @Column
-    private String Sname;
+    @Column(nullable = false)
+    private String firstName;
 
-    @Column
-    private String Surname;
+    @Column(nullable = false)
+    private String lastName;
 
-    @Column
-    private String Faculty;
-
-    @Column
+    @Column(nullable = false)
     private String major;
 
-    @Column
-    private double GPA;
+    @Column(nullable = false)
+    private double gpa;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "DepartmentId")
+    @Column(nullable = false)
+    @Lob
+    private byte[] studentPhoto;
+
+    @Lob
+    private byte[] resume;
+
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id", nullable = false)
     private DepartmentModel department;
 
 
-
-    public StudentModel(){
-        System.out.println("Student constructor");
+    public StudentModel() {
     }
 
-
-    public DepartmentModel getDepartment() {
-        return department;
-    }
-    public void setDepartment(DepartmentModel department) {
-        this.department = department;
+    //creating all the basic functions for the columns
+    public String getFirstName() {
+        return firstName;
     }
 
-
-
-    public Integer getId() {
-        return id;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getSname() {
-        return Sname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setSname(String sname) {
-        Sname = sname;
-    }
-
-    public String getSurname() {
-        return Surname;
-    }
-
-    public void setSurname(String surname) {
-        Surname = surname;
-    }
-
-    public String getFaculty() {
-        return Faculty;
-    }
-
-    public void setFaculty(String faculty) {
-        Faculty = faculty;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getMajor() {
@@ -80,15 +63,37 @@ public class StudentModel {
         this.major = major;
     }
 
-    public double getGPA() {
-        return GPA;
+    public double getGpa() {
+        return gpa;
     }
 
-    public void setGPA(double GPA) {
-        this.GPA = GPA;
+    public void setGpa(double gpa) {
+        this.gpa = gpa;
+    }
+//setting Department
+    public DepartmentModel getDepartment() {
+        return department;
     }
 
 
+    public void setDepartment(DepartmentModel department) {
+        this.department = department;
+    }
+    //allowing the user to upload image of themselves
 
+    public byte[] getStudentImage() {
+        return studentPhoto;
+    }
 
+    public void setStudentImage(byte[] studentPhoto) {
+        this.studentPhoto = studentPhoto;
+    }
+
+    public byte[] getResume() {
+        return resume;
+    }
+
+    public void setResume(byte[] resume) {
+        this.resume = resume;
+    }
 }

@@ -1,51 +1,74 @@
 package org.example.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "departments")
-public class DepartmentModel {
+@Table(name = "faculties")
+public class FacultyModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer DepartmentId;
+    private Integer facultyId;
 
-    @Column
-    private String FacultyName;
+    @Column(nullable = false, unique = true)
+    private String facultyName;
 
-    @Column
-    private String Lecturer;
+    @Column(nullable = false)
+    private String deanName;
 
-    @Column
-    private String Discipline;
+    @Column(nullable = false)
+    private String location;
 
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DepartmentModel> departments = new ArrayList<>();
 
-
-
-    public DepartmentModel(){
-        System.out.println("Department constructor");
+    public Integer getFacultyId() {
+        return facultyId;
     }
 
     public String getFacultyName() {
-        return FacultyName;
+        return facultyName;
     }
 
     public void setFacultyName(String facultyName) {
-        FacultyName = facultyName;
+        this.facultyName = facultyName;
     }
 
-    public String getLecturer() {
-        return Lecturer;
+    public String getDeanName() {
+        return deanName;
     }
 
-    public void setLecturer(String lecturer) {
-        Lecturer = lecturer;
+    public void setDeanName(String deanName) {
+        this.deanName = deanName;
     }
 
-    public String getDiscipline() {
-        return Discipline;
+    public String getLocation() {
+        return location;
     }
 
-    public void setDiscipline(String discipline) {
-        Discipline = discipline;
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public List<DepartmentModel> getDepartments() {
+        return departments;
+    }
+
+    public void setDepartments(List<DepartmentModel> departments) {
+        this.departments.clear();
+        if (departments != null) {
+            departments.forEach(this::addDepartment);
+        }
+    }
+
+    public void addDepartment(DepartmentModel department) {
+        departments.add(department);
+        department.setFaculty(this);
+    }
+
+    public void removeDepartment(DepartmentModel department) {
+        departments.remove(department);
+        department.setFaculty(null);
     }
 }
